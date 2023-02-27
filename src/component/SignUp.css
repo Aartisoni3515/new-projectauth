@@ -7,11 +7,19 @@
 input{
     width: 400px;
     height: 30px;
-    border-radius: 2px;
+    border-radius: 5px;
+    padding: 9px ;
+    box-shadow: 5px 10px 10px 5px rgb(200, 196, 196);
+
+
 }
-button{
-    padding: 10px 40px;
+.button{
+    padding: 6px 40px;
     margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px 5px rgb(200, 196, 196);
+
+
 }
 
 

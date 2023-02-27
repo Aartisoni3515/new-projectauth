@@ -94,7 +94,7 @@ const SignUp = () => {
           value={password}
         />{" "}
         <br /> <br />
-        <button onClick={() => handleSignup()}>Signup</button>
+        <button className="button" onClick={() => handleSignup()}>Signup</button>
       <p>already have an account ? <Link to="/Signin" > Sign in</Link></p>
       </div>
       
