@@ -145,7 +145,7 @@ function RecentOrders() {
   return (
     <>
       <Typography.Text>Recent Orders</Typography.Text>
-      <Table
+      <Table key={Title}
         columns={[
           {
             title: "Title",
@@ -179,7 +179,7 @@ function DashboardChart() {
       const labels = res.carts.map((cart) => {
         return `User-${cart.userId}`;
       });
-      const data = res.carts.map((cart) => {
+      const data = res.carts.map((cart ) => {
         return cart.discountedTotal;
       });
 

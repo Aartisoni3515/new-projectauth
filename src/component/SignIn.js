@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./SignUp.css";
-import { Link, useNavigate } from "react-router-dom";
+import { FileImageOutlined } from "@ant-design/icons";
+
+// import { Link } from "react-router-dom";
 import axios from "axios";
 
 const SignIn = () => {
@@ -9,24 +11,9 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
-  const navigate = useNavigate();
-
-  const handleuserName = (e) => {
-    setuserName(e.target.value);
-    setSubmitted(false);
-  };
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    setSubmitted(false);
-  };
-
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-    setSubmitted(false);
-  };
-
+ 
   const handleSubmit = (e) => {
     console.log("signup");
     axios
@@ -35,25 +22,37 @@ const SignIn = () => {
         email,
         password,
       })
+
       .then(function (response) {
-        if (response.data.redirect == '/') {
-            window.location = "/index"
-        } else if (response.data.redirect == '/signin'){
-            window.location = "/signin"
+        if (response.data.redirect === "/signin") {
+          window.location = "/home";
+        } else if (response.data.redirect === "/signin") {
+          window.location = "/signin";
         }
-    })
-    .catch(function(error) {
-        window.location = "/Home"
-    })
+      })
+      .catch(function (error) {
+        window.location = "/home";
+      });
 
     e.preventDefault();
+    console.log(userName, email, password);
+    const userData = {
+      userName,
+      email,
+      password,
+    };
+    localStorage.setItem("token-info", JSON.stringify(userData));
+    setIsLoggedin(true);
+    setuserName("");
+    setEmail("");
+    setPassword("");
+
     if (userName === "" || email === "" || password === "") {
       setError(true);
     } else {
       setSubmitted(true);
       setError(false);
     }
-   
   };
 
   const successMessage = () => {
@@ -69,6 +68,10 @@ const SignIn = () => {
     );
   };
 
+  const logout = () => {
+    localStorage.removeItem("token-info");
+    setIsLoggedin(false);
+  };
   const errorMessage = () => {
     return (
       <div
@@ -83,47 +86,80 @@ const SignIn = () => {
   };
 
   return (
-    <div className="form">
-      <div className="messages">
-        {errorMessage()}
-        {successMessage()}
+    <>
+      <div className="form">
+        <div className="messages">
+          {errorMessage()}
+          {successMessage()}
+        </div>
+        <div
+          className="container"
+          style={{ textAlign: "center", height: "400px" }}
+        >
+          <h1>Sign In</h1>
+          {!isLoggedin ? (
+            <>
+              <form
+                style={{
+                  background: "white",
+                  width: "100%",
+                  marginTop: "50px",
+                }}
+                action=""
+              >
+                <input
+                  style={{ width: "60%", padding: "10px 20px" }}
+                  type="text"
+                  onChange={(e) => setuserName(e.target.value)}
+                  value={userName}
+                  placeholder="Name"
+                />{" "}
+                <br />
+                <br />
+                <input
+                  style={{ width: "60%", padding: "10px 20px" }}
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  placeholder="Email"
+                />{" "}
+                <br /> <br />
+                <input
+                  style={{ width: "60%", padding: "10px 20px" }}
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  placeholder="Password"
+                />{" "}
+                <br /> <br />
+                <input
+                  required
+                  type="file"
+                  style={{ display: "none" }}
+                  id="file"
+                />
+                <label htmlFor="file">
+                  <img src="" alt="" />
+                  <span>
+                    {" "}
+                    <FileImageOutlined /> Add profile
+                  </span>
+                </label>{" "}
+                <br /> <br />
+                <button className="button" type="submit" onClick={handleSubmit}>
+                  Signin
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <h1>User is logged in</h1>
+              <button onClickCapture={logout}>Logout</button>
+            </>
+          )}
+        </div>
       </div>
-
-      <form>
-        <h1>SIgn In</h1>
-
-        <label className="label">userName</label>
-        <input
-          onChange={handleuserName}
-          className="input"
-          value={userName}
-          type="text"
-        />
-
-        <label className="label">Email</label>
-        <input
-          onChange={handleEmail}
-          className="input"
-          value={email}
-          type="email"
-        />
-
-        <label className="label">Password</label>
-        <input
-          onChange={handlePassword}
-          className="input"
-          value={password}
-          type="password"
-        />
-
-        <button onClick={handleSubmit} className="btn" type="submit">
-          Submit
-        </button>
-        <p>
-          Don't have an account ? <Link to="/"> Sign Up</Link>
-        </p>
-      </form>
-    </div>
+    </>
   );
 };
 export default SignIn;

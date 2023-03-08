@@ -1,18 +1,15 @@
 import axios from "axios";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import "./SignUp.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate()
 
   const handleSignup = () => {
     console.log("signup");
@@ -25,24 +22,23 @@ const SignUp = () => {
         mobile,
         password,
       })
-    
 
       .then(function (response) {
-        if (response.data.redirect == '/') {
-            window.location = "/index"
-        } else if (response.data.redirect == '/signup'){
-            window.location = "/signup"
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+
+        if (response.data.redirect === "/") {
+          window.location = "/index";
+        } else if (response.data.redirect === "/signup") {
+          window.location = "/signup";
         }
-    })
-    .catch(function(error) {
-        window.location = "/signin"
-    })
+      })
+      .catch(function (error) {
+        window.location = "/signin";
+      });
   };
 
-
-
   return (
-    
     <>
       <div className="container">
         <h2>Sign Up</h2>
@@ -94,10 +90,13 @@ const SignUp = () => {
           value={password}
         />{" "}
         <br /> <br />
-        <button className="button" onClick={() => handleSignup()}>Signup</button>
-      <p>already have an account ? <Link to="/Signin" > Sign in</Link></p>
+        <button className="button" onClick={() => handleSignup()}>
+          Signup
+        </button>
+        <p>
+          already have an account ? <Link to="/Signin"> Sign in</Link>
+        </p>
       </div>
-      
     </>
   );
 };
