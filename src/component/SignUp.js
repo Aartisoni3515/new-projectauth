@@ -11,7 +11,7 @@ const SignUp = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = () => {
+  const handleSignup = (props) => {
     console.log("signup");
     axios
       .post("/signup", {
